@@ -6,7 +6,7 @@
 /*   By: lvasseur <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/13 13:34:59 by lvasseur          #+#    #+#             */
-/*   Updated: 2019/11/13 18:06:37 by lvasseur         ###   ########.fr       */
+/*   Updated: 2019/11/13 18:15:55 by lvasseur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@ char	*get_symbol_type(uint8_t type)
 		return (" T ");
 	else if (type == N_EXT)
 		return (" U ");
+	else if (type == 0xF)
+		return (" T ");
 	return ("   ");
 }
 
