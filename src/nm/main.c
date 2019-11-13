@@ -6,7 +6,7 @@
 /*   By: lvasseur <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/13 13:34:59 by lvasseur          #+#    #+#             */
-/*   Updated: 2019/11/13 18:15:55 by lvasseur         ###   ########.fr       */
+/*   Updated: 2019/11/13 18:34:27 by lvasseur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ char	*get_symbol_type(uint8_t type)
 	else if (type == N_ABS)
 		return (" A ");
 	else if (type == N_SECT)
-		return (" t ");
+		return (" d ");
 	else if (type == N_PBUD)
 		return (" u ");
 	else if (type == N_INDR)
@@ -29,7 +29,7 @@ char	*get_symbol_type(uint8_t type)
 	else if (type == N_PEXT)
 		return (" E ");
 	else if (type == N_TYPE)
-		return (" T ");
+		return (" S ");
 	else if (type == N_EXT)
 		return (" U ");
 	else if (type == 0xF)
@@ -56,7 +56,7 @@ void	print_output(int nsyms, int symoff, int stroff, char *ptr)
 	{
 		tab_values[i] = ft_addrtochar(array[i].n_value);
 		tab[i] = ft_strdup(stringtable + array[i].n_un.n_strx);
-		tab_type[i] = ft_strdup(get_symbol_type(array[i].n_type));
+		tab_type[i] = ft_strdup(get_symbol_type(array[i].n_type & N_TYPE));
 		i++;
 	}
 	ft_sorttabtwofollow(&tab, &tab_values, &tab_type, nsyms);
