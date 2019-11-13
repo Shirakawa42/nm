@@ -5,35 +5,34 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: lvasseur <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/05/22 13:45:48 by lvasseur          #+#    #+#             */
-/*   Updated: 2018/05/24 16:36:17 by lvasseur         ###   ########.fr       */
+/*   Created: 2019/11/13 13:34:59 by lvasseur          #+#    #+#             */
+/*   Updated: 2019/11/13 18:06:37 by lvasseur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_nm.h"
-#include <inttypes.h>
+#include "ft_nm_otool.h"
 
 char	*get_symbol_type(uint8_t type)
 {
 	if (type == N_UNDF)
-		return ("U");
+		return (" U ");
 	else if (type == N_ABS)
-		return ("A");
+		return (" A ");
 	else if (type == N_SECT)
-		return ("t");
+		return (" t ");
 	else if (type == N_PBUD)
-		return ("u");
+		return (" u ");
 	else if (type == N_INDR)
-		return ("I");
+		return (" I ");
 	else if (type == N_STAB)
-		return ("D");
+		return (" D ");
 	else if (type == N_PEXT)
-		return ("E");
+		return (" E ");
 	else if (type == N_TYPE)
-		return ("T");
+		return (" T ");
 	else if (type == N_EXT)
-		return ("U");
-	return (" ");
+		return (" U ");
+	return ("   ");
 }
 
 void	print_output(int nsyms, int symoff, int stroff, char *ptr)
@@ -42,34 +41,31 @@ void	print_output(int nsyms, int symoff, int stroff, char *ptr)
 	char			*stringtable;
 	struct nlist_64	*array;
 	char			**tab;
-	char			**tabvalues;
-	char			**tabtype;
+	char			**tab_values;
+	char			**tab_type;
 
 	array = (void*)ptr + symoff;
 	stringtable = (void*)ptr + stroff;
 	tab = (char**)malloc(sizeof(char*) * nsyms);
-	tabvalues = (char**)malloc(sizeof(char*) * nsyms);
-	tabtype = (char**)malloc(sizeof(char*) * nsyms);
-	i = -1;
-	while (++i < nsyms)
+	tab_values = (char**)malloc(sizeof(char*) * nsyms);
+	tab_type = (char**)malloc(sizeof(char*) * nsyms);
+	i = 0;
+	while (i < nsyms)
 	{
-		tab[i] = ft_addrtochar(array[i].n_value);
-		tabtype[i] = get_symbol_type(array[i].n_type);
-		tabvalues[i] = stringtable + array[i].n_un.n_strx;
+		tab_values[i] = ft_addrtochar(array[i].n_value);
+		tab[i] = ft_strdup(stringtable + array[i].n_un.n_strx);
+		tab_type[i] = ft_strdup(get_symbol_type(array[i].n_type));
+		i++;
 	}
-	ft_sorttabtwofollow(&tabvalues, &tab, &tabtype, nsyms);
-	i = -1;
-	while (++i < nsyms)
+	ft_sorttabtwofollow(&tab, &tab_values, &tab_type, nsyms);
+	i = 0;
+	while (i < nsyms)
 	{
-		ft_putstr(tab[i]);
-		ft_putchar(' ');
-		ft_putstr(tabtype[i]);
-		ft_putchar(' ');
-		ft_putstr(tabvalues[i]);
-		ft_putchar('\n');
+		ft_putstr(tab_values[i]);
+		ft_putstr(tab_type[i]);
+		ft_putendl(tab[i]);
+		i++;
 	}
-	free(tab);
-	free(tabvalues);
 }
 
 void	handle_64(char *ptr)
@@ -82,9 +78,8 @@ void	handle_64(char *ptr)
 
 	header = (struct mach_header_64*)ptr;
 	ncmds = header->ncmds;
-	i = -1;
 	lc = (void*)ptr + sizeof(*header);
-	while (++i < ncmds)
+	for (i = 0; i < ncmds; ++i)
 	{
 		if (lc->cmd == LC_SYMTAB)
 		{
@@ -98,13 +93,11 @@ void	handle_64(char *ptr)
 
 void	nm(char *ptr)
 {
-	int		magic_number;
+	int	magic_number;
 
 	magic_number = *(int*)ptr;
-	if (magic_number == MH_MAGIC_64)
-	{
+	if (magic_number == (int)MH_MAGIC_64)
 		handle_64(ptr);
-	}
 }
 
 int		main(int ac, char **av)
@@ -114,7 +107,10 @@ int		main(int ac, char **av)
 	struct stat	buf;
 
 	if (ac != 2)
+	{
+		fprintf(stderr, "Please give me an arg\n");
 		return (EXIT_FAILURE);
+	}
 	if ((fd = open(av[1], O_RDONLY)) < 0)
 	{
 		perror("open");
@@ -136,5 +132,5 @@ int		main(int ac, char **av)
 		perror("munmap");
 		return (EXIT_FAILURE);
 	}
-	return (EXIT_SUCCESS);
+	return (0);
 }

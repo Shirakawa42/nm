@@ -1,24 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_nm.h                                            :+:      :+:    :+:   */
+/*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lvasseur <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/05/22 13:46:59 by lvasseur          #+#    #+#             */
-/*   Updated: 2018/05/22 14:21:55 by lvasseur         ###   ########.fr       */
+/*   Created: 2019/11/13 13:34:59 by lvasseur          #+#    #+#             */
+/*   Updated: 2019/11/13 14:01:02 by lvasseur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_NM_H
+#include "ft_nm_otool.h"
 
-# define FT_NM_H
-
-#include "libft.h"
-#include <stdio.h>
-#include <sys/mman.h>
-#include <mach-o/loader.h>
-#include <mach-o/nlist.h>
-#include <sys/stat.h>
-
-#endif
+int		main(int ac, char **av)
+{
+	(void)ac;
+	(void)av;
+	return (0);
+}
